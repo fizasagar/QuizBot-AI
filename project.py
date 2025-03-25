@@ -1,40 +1,59 @@
 import streamlit as st
-import openai
+import random
 
-# OpenAI API Key (Replace with your actual API key)
-openai.api_key = "your_openai_api_key"
+# Custom CSS for Background Color 🌈
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #f4f4f4; /* Light gray background */
+    }
+    .stApp {
+        background-color: #98ff98; /* Soft blue background */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-def get_quiz_question(topic):
-    """Generate a multiple-choice quiz question from AI."""
-    prompt = f"Generate a multiple-choaice question about {topic} with four options and the correct answer. Format it as: Question, Option A, Option B, Option C, Option D, Correct Option."
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response["choices"][0]["message"]["content"].split("\n")
+# Predefined Python quiz questions
+quiz_data = [
+    ("Which data structure is mutable?", ["List", "Tuple", "String", "Enum"], "List"),
+    ("What keyword is used for defining a function?", ["def", "func", "define", "lambda"], "def"),
+    ("Which of these data structures maintains order?", ["Set", "Dictionary", "List", "Enum"], "List"),
+    ("How do you check if a key exists in a dictionary?", ["if key in dict", "dict.has_key()", "dict.exists()", "check key dict"], "if key in dict"),
+    ("Which statement is used for decision-making?", ["if-else", "loop", "define", "class"], "if-else"),
+    ("What is the default value returned by a function if no return statement is used?", ["None", "0", "False", "Empty String"], "None"),
+    ("Which data structure stores unique values only?", ["List", "Set", "Dictionary", "Tuple"], "Set"),
+    ("How do you define a tuple?", ["(1,2,3)", "[1,2,3]", "{1,2,3}", "'1,2,3'"], "(1,2,3)"),
+    ("Which function is used to get user input?", ["input()", "get()", "read()", "scan()"], "input()"),
+    ("Which module in Python is used for working with enumerations?", ["enum", "enum_class", "enumlib", "enumtypes"], "enum")
+]
 
-st.title("QuizBot AI 🤖")
+st.title("QuizBot AI 🤖 - Python Edition")
+st.write("Test your Python skills with an interactive quiz!")
 
-topic = st.text_input("Kis topic pe quiz chahiye? (e.g., Python, Science, History)")
-
+# Generate a random question
 if st.button("Generate Quiz"):
-    if topic:
-        quiz_data = get_quiz_question(topic)
-        if len(quiz_data) == 6:
-            st.session_state["question"] = quiz_data[0]
-            st.session_state["options"] = quiz_data[1:5]
-            st.session_state["correct_answer"] = quiz_data[5].split(": ")[1]
-            st.radio("Select the correct answer:", st.session_state["options"], key="user_answer")
-        else:
-            st.error("AI se sahi format mein question nahi mila. Dobara try karo!")
-    else:
-        st.error("Pehle ek topic likho!")
+    question, options, correct_answer = random.choice(quiz_data)
+    
+    # Store in session state
+    st.session_state["question"] = question
+    st.session_state["options"] = options
+    st.session_state["correct_answer"] = correct_answer
+    st.session_state["user_answer"] = None
 
+# Display the quiz if a question is generated
+if "question" in st.session_state:
+    st.subheader(st.session_state["question"])
+    st.session_state["user_answer"] = st.radio("Choose your answer:", st.session_state["options"])
+
+# Submit button
 if st.button("Submit Answer"):
-    if "question" in st.session_state and "user_answer" in st.session_state:
+    if st.session_state["user_answer"]:
         if st.session_state["user_answer"] == st.session_state["correct_answer"]:
-            st.success("✅ Bilkul sahi jawab! Great job! 🎉")
+            st.success("✅ Correct! Well done! 🎉")
         else:
-            st.error(f"❌ Galat jawab! Sahi jawab: {st.session_state['correct_answer']}")
+            st.error(f"❌ Incorrect! The correct answer is: {st.session_state['correct_answer']}")
     else:
-        st.error("Pehle question generate kro aur answer select kro!")
+        st.warning("Please select an answer before submitting!")
