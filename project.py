@@ -34,52 +34,61 @@ st.write("Think you know Python? Take this 10-question challenge and prove your 
 
 # Initialize session state variables
 if "score" not in st.session_state:
-    st.session_state["score"] = 0
+    st.session_state.score = 0
 if "question_index" not in st.session_state:
-    st.session_state["question_index"] = 0
+    st.session_state.question_index = 0
 if "quiz_over" not in st.session_state:
-    st.session_state["quiz_over"] = False
-if "answer_submitted" not in st.session_state:
-    st.session_state["answer_submitted"] = False
+    st.session_state.quiz_over = False
+if "show_feedback" not in st.session_state:
+    st.session_state.show_feedback = False
 
-# Check if quiz is over before accessing quiz_data
-if st.session_state["question_index"] >= len(quiz_data):
-    st.session_state["quiz_over"] = True
+# Check if quiz is over
+if st.session_state.question_index >= len(quiz_data):
+    st.session_state.quiz_over = True
 
 # Show quiz if not over
-if not st.session_state["quiz_over"]:
-    question, options, correct_answer = quiz_data[st.session_state["question_index"]]
-
-    st.subheader(question)
-    user_answer = st.radio("Choose your answer:", options, key=f"q{st.session_state['question_index']}")
-
-    # Answer submission logic
-    if st.button("Submit Answer", key=f"submit_{st.session_state['question_index']}"):
-        st.session_state["answer_submitted"] = True
+if not st.session_state.quiz_over:
+    question, options, correct_answer = quiz_data[st.session_state.question_index]
+    
+    st.subheader(f"Question {st.session_state.question_index + 1}")
+    st.write(question)
+    
+    # Only show radio and submit button if feedback isn't being shown
+    if not st.session_state.show_feedback:
+        user_answer = st.radio("Choose your answer:", options, key=f"q{st.session_state.question_index}")
         
-        if user_answer == correct_answer:
-            st.session_state["score"] += 1
+        if st.button("Submit Answer"):
+            st.session_state.show_feedback = True
+            st.session_state.user_answer = user_answer
+            st.session_state.correct_answer = correct_answer
+            
+            if user_answer == correct_answer:
+                st.session_state.score += 1
+            st.rerun()
+    
+    # Show feedback if submitted
+    if st.session_state.show_feedback:
+        if st.session_state.user_answer == st.session_state.correct_answer:
             st.success("✅ Correct! Well done! 🎉")
         else:
-            st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
-
-        # Wait for 2 seconds and move to next question
-        time.sleep(2)
-        st.session_state["question_index"] += 1
-        st.session_state["answer_submitted"] = False  # Reset for next question
-
-        if st.session_state["question_index"] >= len(quiz_data):
-            st.session_state["quiz_over"] = True
+            st.error(f"❌ Incorrect! The correct answer is: {st.session_state.correct_answer}")
         
-        st.rerun()  # Auto-refresh to next question
+        # Automatically move to next question after delay
+        time.sleep(2)
+        st.session_state.question_index += 1
+        st.session_state.show_feedback = False
+        
+        if st.session_state.question_index >= len(quiz_data):
+            st.session_state.quiz_over = True
+        st.rerun()
 
 # Show final score when quiz ends
-if st.session_state["quiz_over"]:
+if st.session_state.quiz_over:
     st.balloons()
-    st.success(f"🎉 Quiz Completed! Your final score: {st.session_state['score']} / {len(quiz_data)}")
-    if st.button("Restart Quiz", key="restart"):
-        st.session_state["question_index"] = 0
-        st.session_state["score"] = 0
-        st.session_state["quiz_over"] = False
-        st.session_state["answer_submitted"] = False
+    st.success(f"🎉 Quiz Completed! Your final score: {st.session_state.score} / {len(quiz_data)}")
+    if st.button("Restart Quiz"):
+        st.session_state.question_index = 0
+        st.session_state.score = 0
+        st.session_state.quiz_over = False
+        st.session_state.show_feedback = False
         st.rerun()
