@@ -76,6 +76,7 @@ if not st.session_state["quiz_over"]:
 
 # Show final score when quiz ends
 if st.session_state["quiz_over"]:
+    st.balloons()
     st.success(f"🎉 Quiz Completed! Your final score: {st.session_state['score']} / {len(quiz_data)}")
     if st.button("Restart Quiz"):
         st.session_state["question_index"] = 0
