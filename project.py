@@ -1,15 +1,14 @@
 import streamlit as st
 import random
 
-# Custom CSS for Background Color 🌈
+# Custom CSS for Gradient Background
 st.markdown(
     """
     <style>
-    body {
-        background-color: #f4f4f4; /* Light gray background */
-    }
     .stApp {
-        background-color: #98ff98; /* Soft blue background */
+        background: linear-gradient(180deg, #C599B6, #E6B2BA, #FAD0C4);
+        background-attachment: fixed;
+        color: black; 
     }
     </style>
     """,
@@ -34,26 +33,28 @@ st.title("QuizBot AI 🤖 - Python Edition")
 st.write("Test your Python skills with an interactive quiz!")
 
 # Generate a random question
-if st.button("Generate Quiz"):
-    question, options, correct_answer = random.choice(quiz_data)
-    
-    # Store in session state
-    st.session_state["question"] = question
-    st.session_state["options"] = options
-    st.session_state["correct_answer"] = correct_answer
-    st.session_state["user_answer"] = None
+if "question" not in st.session_state:
+    if st.button("Generate Quiz"):
+        question, options, correct_answer = random.choice(quiz_data)
+        st.session_state["question"] = question
+        st.session_state["options"] = options
+        st.session_state["correct_answer"] = correct_answer
+        st.session_state["user_answer"] = None
 
 # Display the quiz if a question is generated
 if "question" in st.session_state:
     st.subheader(st.session_state["question"])
-    st.session_state["user_answer"] = st.radio("Choose your answer:", st.session_state["options"])
+    st.session_state["user_answer"] = st.radio("Choose your answer:", st.session_state["options"], key="quiz_options")
 
-# Submit button
-if st.button("Submit Answer"):
-    if st.session_state["user_answer"]:
-        if st.session_state["user_answer"] == st.session_state["correct_answer"]:
-            st.success("✅ Correct! Well done! 🎉")
+    # Submit button
+    if st.button("Submit Answer"):
+        if st.session_state["user_answer"]:
+            if st.session_state["user_answer"] == st.session_state["correct_answer"]:
+                st.success("✅ Correct! Well done! 🎉")
+            else:
+                st.error(f"❌ Incorrect! The correct answer is: {st.session_state['correct_answer']}")
+            
+            # Reset for new question
+            st.session_state.pop("question")
         else:
-            st.error(f"❌ Incorrect! The correct answer is: {st.session_state['correct_answer']}")
-    else:
-        st.warning("Please select an answer before submitting!")
+            st.warning("Please select an answer before submitting!")
