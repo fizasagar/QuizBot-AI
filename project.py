@@ -30,7 +30,7 @@ quiz_data = [
 ]
 
 st.title("Ultimate Python Quiz 🎓📖")
-st.write("Think you know Python? Take this 10-question challenge and prove your skills! Let's see if you can ace the Ultimate Python Quiz! 🧠💪")
+st.write("Think you know Python? Take this 10-question challenge and prove your skills! 🧠💪")
 
 # Initialize session state variables
 if "score" not in st.session_state:
@@ -39,8 +39,6 @@ if "question_index" not in st.session_state:
     st.session_state["question_index"] = 0
 if "quiz_over" not in st.session_state:
     st.session_state["quiz_over"] = False
-if "answer_submitted" not in st.session_state:
-    st.session_state["answer_submitted"] = False
 
 # **Check if quiz is over before accessing quiz_data**
 if st.session_state["question_index"] >= len(quiz_data):
@@ -51,12 +49,12 @@ if not st.session_state["quiz_over"]:
     question, options, correct_answer = quiz_data[st.session_state["question_index"]]
 
     st.subheader(question)
+
+    # Radio button with a unique key per question
     user_answer = st.radio("Choose your answer:", options, key=st.session_state["question_index"])
 
     # **Auto submit on selection**
     if user_answer:
-        st.session_state["answer_submitted"] = True
-
         if user_answer == correct_answer:
             st.session_state["score"] += 1
             st.success("✅ Correct! Well done! 🎉")
@@ -68,12 +66,10 @@ if not st.session_state["quiz_over"]:
 
         # **Move to next question automatically**
         st.session_state["question_index"] += 1
-        st.session_state["answer_submitted"] = False  # Reset for next question
 
         if st.session_state["question_index"] >= len(quiz_data):
             st.session_state["quiz_over"] = True
-        else:
-            st.rerun()  # **Auto-refresh to show next question**
+        st.rerun()  # **Auto-refresh to show next question**
 
 # Show final score when quiz ends
 if st.session_state["quiz_over"]:
@@ -83,5 +79,4 @@ if st.session_state["quiz_over"]:
         st.session_state["question_index"] = 0
         st.session_state["score"] = 0
         st.session_state["quiz_over"] = False
-        st.session_state["answer_submitted"] = False
         st.rerun()
