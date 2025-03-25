@@ -63,16 +63,15 @@ if not st.session_state["quiz_over"]:
         else:
             st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
 
-    # Next Question Button (Only shows after answer is submitted)
-    if st.session_state["answer_submitted"]:
-        if st.button("Next Question"):
-            st.session_state["question_index"] += 1
-            st.session_state["answer_submitted"] = False  # Reset for next question
-            st.rerun()
-            
-            # Check if quiz is over
-            if st.session_state["question_index"] >= len(quiz_data):
-                st.session_state["quiz_over"] = True
+    
+    # Automatically move to next question after 2 seconds
+    st.session_state["question_index"] += 1
+    st.session_state["answer_submitted"] = False  # Reset for next question
+
+    if st.session_state["question_index"] >= len(quiz_data):
+        st.session_state["quiz_over"] = True
+    else:
+        st.rerun()  # Auto-refresh to show next question
 
 # Show final score when quiz ends
 if st.session_state["quiz_over"]:
