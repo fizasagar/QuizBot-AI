@@ -42,9 +42,12 @@ if "quiz_over" not in st.session_state:
 if "answer_submitted" not in st.session_state:
     st.session_state["answer_submitted"] = False
 
+# **Check if quiz is over before accessing quiz_data**
+if st.session_state["question_index"] >= len(quiz_data):
+    st.session_state["quiz_over"] = True
+
 # Show quiz if not over
 if not st.session_state["quiz_over"]:
-    # Get current question
     question, options, correct_answer = quiz_data[st.session_state["question_index"]]
 
     st.subheader(question)
