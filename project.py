@@ -20,7 +20,7 @@ st.markdown(
         font-weight: bold;
     }
     </style>
-    <div class="footer">Crafted with passion & precision by Fiza Asif | © 2025</div>
+    <div class="footer">Crafted with ❤ & passion by Fiza Asif | © 2025</div>
     """,
     unsafe_allow_html=True
 )
@@ -40,7 +40,7 @@ quiz_data = [
 ]
 
 st.title("QuizBot AI 🤖 - Python Edition")
-st.write("Test your Python skills with a 10-question interactive quiz!")
+st.write("Test your Python skills with a 10 Questions interactive quiz!")
 
 # Initialize session state
 if "question_index" not in st.session_state:
@@ -64,7 +64,7 @@ if st.session_state["question_index"] < 10:
         
         # Move to next question
         st.session_state["question_index"] += 1
-        st.experimental_rerun()
+        st.rerun()
 
 else:
     # Show final score
