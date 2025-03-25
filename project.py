@@ -39,8 +39,8 @@ quiz_data = [
     ("Which module in Python is used for working with enumerations?", ["enum", "enum_class", "enumlib", "enumtypes"], "enum")
 ]
 
-st.title("QuizBot AI 🤖 - Python Edition")
-st.write("Test your Python skills with a 10 Questions interactive quiz!")
+st.title("Ultimate Python Quiz 🎓")
+st.write("Think you know Python? 🧠 Take this 10-question challenge and prove your skills! 🎯 Let's see if you can ace the Ultimate Python Quiz! 🎓🔥")
 
 # Initialize session state
 if "question_index" not in st.session_state:
@@ -77,4 +77,4 @@ else:
         st.session_state["question_index"] = 0
         st.session_state["score"] = 0
         st.session_state["quiz_questions"] = random.sample(quiz_data, 10)  # Reset with new random questions
-        st.experimental_rerun()
+        st.rerun()
