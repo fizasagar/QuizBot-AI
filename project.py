@@ -65,6 +65,7 @@ if not st.session_state["quiz_over"]:
         if st.button("Next Question"):
             st.session_state["question_index"] += 1
             st.session_state["answer_submitted"] = False  # Reset for next question
+            st.rerun()
             
             # Check if quiz is over
             if st.session_state["question_index"] >= len(quiz_data):
