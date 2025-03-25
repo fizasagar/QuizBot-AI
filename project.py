@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 
-# Custom CSS for Gradient Background
+# Custom CSS for Gradient Background & Footer
 st.markdown(
     """
     <style>
@@ -24,7 +24,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-   
 
 # Predefined Python quiz questions
 quiz_data = [
@@ -40,32 +39,42 @@ quiz_data = [
     ("Which module in Python is used for working with enumerations?", ["enum", "enum_class", "enumlib", "enumtypes"], "enum")
 ]
 
-st.title("QuizBot AI 🤖")
-st.write("Test your Python skills with an interactive quiz!")
+st.title("QuizBot AI 🤖 - Python Edition")
+st.write("Test your Python skills with a 10-question interactive quiz!")
 
-# Generate a random question
-if "question" not in st.session_state:
-    if st.button("Generate Quiz"):
-        question, options, correct_answer = random.choice(quiz_data)
-        st.session_state["question"] = question
-        st.session_state["options"] = options
-        st.session_state["correct_answer"] = correct_answer
-        st.session_state["user_answer"] = None
+# Initialize session state
+if "question_index" not in st.session_state:
+    st.session_state["question_index"] = 0
+    st.session_state["score"] = 0
+    st.session_state["quiz_questions"] = random.sample(quiz_data, 10)  # Pick 10 random questions
 
-# Display the quiz if a question is generated
-if "question" in st.session_state:
-    st.subheader(st.session_state["question"])
-    st.session_state["user_answer"] = st.radio("Choose your answer:", st.session_state["options"], key="quiz_options")
+# Get the current question
+if st.session_state["question_index"] < 10:
+    question, options, correct_answer = st.session_state["quiz_questions"][st.session_state["question_index"]]
+    
+    st.subheader(f"Question {st.session_state['question_index'] + 1}: {question}")
+    user_answer = st.radio("Choose your answer:", options, key=f"q{st.session_state['question_index']}")
 
-    # Submit button
     if st.button("Submit Answer"):
-        if st.session_state["user_answer"]:
-            if st.session_state["user_answer"] == st.session_state["correct_answer"]:
-                st.success("✅ Correct! Well done! 🎉")
-            else:
-                st.error(f"❌ Incorrect! The correct answer is: {st.session_state['correct_answer']}")
-            
-            # Reset for new question
-            st.session_state.pop("question")
+        if user_answer == correct_answer:
+            st.session_state["score"] += 1
+            st.success("✅ Correct! Well done! 🎉")
         else:
-            st.warning("Please select an answer before submitting!")
+            st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
+        
+        # Move to next question
+        st.session_state["question_index"] += 1
+        st.experimental_rerun()
+
+else:
+    # Show final score
+    st.subheader("Quiz Completed! 🎯")
+    st.write(f"Your final score: **{st.session_state['score']} / 10**")
+    st.balloons()
+
+    # Reset quiz button
+    if st.button("Restart Quiz"):
+        st.session_state["question_index"] = 0
+        st.session_state["score"] = 0
+        st.session_state["quiz_questions"] = random.sample(quiz_data, 10)  # Reset with new random questions
+        st.experimental_rerun()
