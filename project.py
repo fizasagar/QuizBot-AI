@@ -54,25 +54,24 @@ if not st.session_state["quiz_over"]:
     user_answer = st.radio("Choose your answer:", options, key=f"q{st.session_state['question_index']}")
 
     # Answer submission logic
-    if not st.session_state["answer_submitted"]:
-        if st.button("Submit Answer", key=f"submit_{st.session_state['question_index']}"):
-            st.session_state["answer_submitted"] = True
+    if st.button("Submit Answer", key=f"submit_{st.session_state['question_index']}"):
+        st.session_state["answer_submitted"] = True
+        
+        if user_answer == correct_answer:
+            st.session_state["score"] += 1
+            st.success("✅ Correct! Well done! 🎉")
+        else:
+            st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
 
-            if user_answer == correct_answer:
-                st.session_state["score"] += 1
-                st.success("✅ Correct! Well done! 🎉")
-            else:
-                st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
+        # Wait for 2 seconds and move to next question
+        time.sleep(2)
+        st.session_state["question_index"] += 1
+        st.session_state["answer_submitted"] = False  # Reset for next question
 
-            # Wait for 2 seconds and move to next question
-            time.sleep(2)
-            st.session_state["question_index"] += 1
-            st.session_state["answer_submitted"] = False  # Reset for next question
-
-            if st.session_state["question_index"] >= len(quiz_data):
-                st.session_state["quiz_over"] = True
-            
-            st.rerun()  # Auto-refresh to next question
+        if st.session_state["question_index"] >= len(quiz_data):
+            st.session_state["quiz_over"] = True
+        
+        st.rerun()  # Auto-refresh to next question
 
 # Show final score when quiz ends
 if st.session_state["quiz_over"]:
