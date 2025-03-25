@@ -10,10 +10,21 @@ st.markdown(
         background-attachment: fixed;
         color: black; 
     }
+    .footer {
+        position: fixed;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        color: black;
+        font-weight: bold;
+    }
     </style>
+    <div class="footer">Crafted with passion & precision by Fiza Asif | © 2025</div>
     """,
     unsafe_allow_html=True
 )
+   
 
 # Predefined Python quiz questions
 quiz_data = [
@@ -29,7 +40,7 @@ quiz_data = [
     ("Which module in Python is used for working with enumerations?", ["enum", "enum_class", "enumlib", "enumtypes"], "enum")
 ]
 
-st.title("QuizBot AI 🤖 - Python Edition")
+st.title("QuizBot AI 🤖")
 st.write("Test your Python skills with an interactive quiz!")
 
 # Generate a random question
