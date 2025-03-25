@@ -28,15 +28,15 @@ st.markdown(
 
 # Predefined Python quiz questions
 quiz_data = [
-    ("Which data structure is mutable?", ["List", "Tuple", "String", "Enum"], "List"),
-    ("What keyword is used for defining a function?", ["def", "func", "define", "lambda"], "def"),
+    ("Which data structure is mutable?", ["Tuple", "List", "String", "Enum"], "List"),
+    ("What keyword is used for defining a function?", ["func", "define", "lambda", "def"], "def"),
     ("Which of these data structures maintains order?", ["Set", "Dictionary", "List", "Enum"], "List"),
-    ("How do you check if a key exists in a dictionary?", ["if key in dict", "dict.has_key()", "dict.exists()", "check key dict"], "if key in dict"),
+    ("How do you check if a key exists in a dictionary?", ["dict.has_key()", "if key in dict" "dict.exists()", "check key dict"], "if key in dict"),
     ("Which statement is used for decision-making?", ["if-else", "loop", "define", "class"], "if-else"),
-    ("What is the default value returned by a function if no return statement is used?", ["None", "0", "False", "Empty String"], "None"),
+    ("What is the default value returned by a function if no return statement is used?", ["0", "False", "None", "Empty String"], "None"),
     ("Which data structure stores unique values only?", ["List", "Set", "Dictionary", "Tuple"], "Set"),
-    ("How do you define a tuple?", ["(1,2,3)", "[1,2,3]", "{1,2,3}", "'1,2,3'"], "(1,2,3)"),
-    ("Which function is used to get user input?", ["input()", "get()", "read()", "scan()"], "input()"),
+    ("How do you define a tuple?", ["[1,2,3]", "(1,2,3)", "{1,2,3}", "'1,2,3'"], "(1,2,3)"),
+    ("Which function is used to get user input?", ["get()", "read()", "input()", "scan()"], "input()"),
     ("Which module in Python is used for working with enumerations?", ["enum", "enum_class", "enumlib", "enumtypes"], "enum")
 ]
 
