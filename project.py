@@ -56,7 +56,7 @@ if st.session_state["question_index"] < 10:
     user_answer = st.radio("Choose your answer:", options, key=f"q{st.session_state['question_index']}")
 
     
-  # Submit Answer Button
+   # Submit Answer Button
     if st.button("Submit Answer") and not st.session_state["answer_submitted"]:
         st.session_state["answer_submitted"] = True
 
@@ -69,12 +69,13 @@ if st.session_state["question_index"] < 10:
     # Next Question Button (Only shows after answer is submitted)
     if st.session_state["answer_submitted"]:
         if st.button("Next Question"):
-            st.session_state["question_index"] += 1
-            st.session_state["answer_submitted"] = False  # Reset for next question
-        
-        # Move to next question
-        st.session_state["question_index"] += 1
-        st.rerun()
+            if st.session_state["question_index"] < len(quiz_data) - 1:
+                st.session_state["question_index"] += 1
+                st.session_state["answer_submitted"] = False  # Reset for next question
+                st.experimental_rerun()
+            else:
+                st.session_state["quiz_over"] = True
+                st.rerun()
 
 else:
     # Show final score
