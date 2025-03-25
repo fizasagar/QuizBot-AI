@@ -42,7 +42,7 @@ if "quiz_over" not in st.session_state:
 if "answer_submitted" not in st.session_state:
     st.session_state["answer_submitted"] = False
 
-# **Check if quiz is over before accessing quiz_data**
+# Check if quiz is over before accessing quiz_data
 if st.session_state["question_index"] >= len(quiz_data):
     st.session_state["quiz_over"] = True
 
@@ -51,30 +51,28 @@ if not st.session_state["quiz_over"]:
     question, options, correct_answer = quiz_data[st.session_state["question_index"]]
 
     st.subheader(question)
-    user_answer = st.radio("Choose your answer:", options, key=st.session_state["question_index"])
+    user_answer = st.radio("Choose your answer:", options, key=f"q{st.session_state['question_index']}")
 
-    # Submit Answer Button
-    if st.button("Submit Answer", key=f"submit_{st.session_state['question_index']}") and not st.session_state["answer_submitted"]:
-        st.session_state["answer_submitted"] = True
+    # Answer submission logic
+    if not st.session_state["answer_submitted"]:
+        if st.button("Submit Answer", key=f"submit_{st.session_state['question_index']}"):
+            st.session_state["answer_submitted"] = True
 
-        if user_answer == correct_answer:
-            st.session_state["score"] += 1
-            st.success("✅ Correct! Well done! 🎉")
-        else:
-            st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
+            if user_answer == correct_answer:
+                st.session_state["score"] += 1
+                st.success("✅ Correct! Well done! 🎉")
+            else:
+                st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
 
-        # **Wait for 2 seconds before moving to next question**
-        time.sleep(2)
+            # Wait for 2 seconds and move to next question
+            time.sleep(2)
+            st.session_state["question_index"] += 1
+            st.session_state["answer_submitted"] = False  # Reset for next question
 
-        # **Move to next question automatically**
-        st.session_state["question_index"] += 1
-        st.session_state["answer_submitted"] = False  # Reset for next question
-
-        if st.session_state["question_index"] >= len(quiz_data):
-            st.session_state["quiz_over"] = True
-        
-        # **Instead of showing button, auto-refresh page**
-        st.rerun()
+            if st.session_state["question_index"] >= len(quiz_data):
+                st.session_state["quiz_over"] = True
+            
+            st.rerun()  # Auto-refresh to next question
 
 # Show final score when quiz ends
 if st.session_state["quiz_over"]:
