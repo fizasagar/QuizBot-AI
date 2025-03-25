@@ -53,8 +53,8 @@ if not st.session_state["quiz_over"]:
     st.subheader(question)
     user_answer = st.radio("Choose your answer:", options, key=st.session_state["question_index"])
 
-    # Submit Answer Button
-    if st.button("Submit Answer", key=f"submit_{st.session_state['question_index']}") and not st.session_state["answer_submitted"]:
+    # **Auto submit on selection**
+    if user_answer:
         st.session_state["answer_submitted"] = True
 
         if user_answer == correct_answer:
@@ -63,17 +63,17 @@ if not st.session_state["quiz_over"]:
         else:
             st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
 
-        # Wait for 2 seconds before moving to next question
-        time.sleep(2)
+        # **Wait for 1.5 seconds before moving to next question**
+        time.sleep(1.5)
 
-        # Move to next question automatically
+        # **Move to next question automatically**
         st.session_state["question_index"] += 1
         st.session_state["answer_submitted"] = False  # Reset for next question
 
         if st.session_state["question_index"] >= len(quiz_data):
             st.session_state["quiz_over"] = True
-
-        st.rerun()  # Auto-refresh to show next question
+        else:
+            st.rerun()  # **Auto-refresh to show next question**
 
 # Show final score when quiz ends
 if st.session_state["quiz_over"]:
