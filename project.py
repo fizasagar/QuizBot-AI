@@ -54,7 +54,7 @@ if not st.session_state["quiz_over"]:
     user_answer = st.radio("Choose your answer:", options, key=st.session_state["question_index"])
 
     # Submit Answer Button
-    if st.button("Submit Answer") and not st.session_state["answer_submitted"]:
+    if st.button("Submit Answer", key=f"submit_{st.session_state['question_index']}") and not st.session_state["answer_submitted"]:
         st.session_state["answer_submitted"] = True
 
         if user_answer == correct_answer:
@@ -72,8 +72,8 @@ if not st.session_state["quiz_over"]:
 
         if st.session_state["question_index"] >= len(quiz_data):
             st.session_state["quiz_over"] = True
-        else:
-            st.rerun()  # **Auto-refresh to show next question**
+
+        st.rerun()  # Auto-refresh to show next question
 
 # Show final score when quiz ends
 if st.session_state["quiz_over"]:
