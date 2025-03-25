@@ -53,27 +53,28 @@ if not st.session_state["quiz_over"]:
     st.subheader(question)
     user_answer = st.radio("Choose your answer:", options)
 
-    # Submit Answer Button
-    if st.button("Submit Answer") and not st.session_state["answer_submitted"]:
-        st.session_state["answer_submitted"] = True
+    # **Submit Answer Button - Show only if answer is not submitted**
+    if not st.session_state["answer_submitted"]:
+        if st.button("Submit Answer"):
+            st.session_state["answer_submitted"] = True
 
-        if user_answer == correct_answer:
-            st.session_state["score"] += 1
-            st.success("✅ Correct! Well done! 🎉")
-        else:
-            st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
+            if user_answer == correct_answer:
+                st.session_state["score"] += 1
+                st.success("✅ Correct! Well done! 🎉")
+            else:
+                st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
 
-        # **Wait for 2 seconds before moving to next question**
-        time.sleep(2)
+            # **Wait for 2 seconds before moving to next question**
+            time.sleep(2)
 
-        # **Move to next question automatically**
-        st.session_state["question_index"] += 1
-        st.session_state["answer_submitted"] = False  # Reset for next question
+            # **Move to next question automatically**
+            st.session_state["question_index"] += 1
+            st.session_state["answer_submitted"] = False  # Reset for next question
 
-        if st.session_state["question_index"] >= len(quiz_data):
-            st.session_state["quiz_over"] = True
-        else:
-            st.rerun()  # **Auto-refresh to show next question**
+            if st.session_state["question_index"] >= len(quiz_data):
+                st.session_state["quiz_over"] = True
+            else:
+                st.rerun()  # ✅ **Auto-refresh to show next question**
 
 # Show final score when quiz ends
 if st.session_state["quiz_over"]:
