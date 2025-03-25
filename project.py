@@ -55,12 +55,22 @@ if st.session_state["question_index"] < 10:
     st.subheader(f"Question {st.session_state['question_index'] + 1}: {question}")
     user_answer = st.radio("Choose your answer:", options, key=f"q{st.session_state['question_index']}")
 
-    if st.button("Submit Answer"):
+    
+  # Submit Answer Button
+    if st.button("Submit Answer") and not st.session_state["answer_submitted"]:
+        st.session_state["answer_submitted"] = True
+
         if user_answer == correct_answer:
             st.session_state["score"] += 1
             st.success("✅ Correct! Well done! 🎉")
         else:
             st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
+
+    # Next Question Button (Only shows after answer is submitted)
+    if st.session_state["answer_submitted"]:
+        if st.button("Next Question"):
+            st.session_state["question_index"] += 1
+            st.session_state["answer_submitted"] = False  # Reset for next question
         
         # Move to next question
         st.session_state["question_index"] += 1
